@@ -1,0 +1,52 @@
+.sidebar{
+	width: 280px;
+	min-height: 700px;
+}
+.info{
+	left: 10px;
+	box-shadow: 0px 0px 10px gainsboro;
+	width: 260px;
+	min-height: 380px;
+	background: url(../images/sidebar-bg.png);
+}
+.avatar{
+	padding: 5px;
+	width: 112px;
+	height: 112px;
+	margin: 28px auto 7px;
+	border-radius: 61px;
+	background: url(../images/avatar.jpg) -4px 0px/130px 130px no-repeat;
+}
+.name{
+	font-family: 'Alegreya SC', serif;
+	font-size: 22px;
+	padding: 5px 0;
+	text-align: center;
+	color: #666;
+	text-shadow: 0px 0px 5px gray;
+	margin-top: 20px;
+}
+.blogdesc{
+	font-size: 14px;
+	/*padding: 0 14px 14px;*/
+	text-align: center;
+	color: #BBB;
+	border: 0;
+	text-shadow: 0px 0px 2px darkgrey;
+	opacity: 0.9;
+}
+
+.wisdom{
+	width: 240px;
+	margin: 20px 10px;
+	top: 390px;
+	box-shadow: 0px 0px 10px gainsboro;
+	font-size: 14px;
+}
+.wisdom p{
+	color: #757575;
+	border-top: 1px dashed #E0E0E0;
+	border-bottom: 1px dashed #E0E0E0;
+	padding: 15px 10px 20px 20px;
+	text-shadow: 0px 0px 2px darkgrey;
+}
