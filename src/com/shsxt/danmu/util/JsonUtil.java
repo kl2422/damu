@@ -15,10 +15,11 @@ public class JsonUtil {
 	
 	private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 	
-	public static void toJson(Object obj, HttpServletResponse resp) {
+	public static void toJson(Object obj, HttpServletResponse response) {
 		PrintWriter pw = null;
 		try {
-			pw = resp.getWriter();
+			response.setContentType("application/json;chartset=utf-8");
+			pw = response.getWriter();
 			String result = new Gson().toJson(obj);
 			pw.write(result);
 			pw.flush();

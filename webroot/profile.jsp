@@ -413,7 +413,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 		// 添加视频
         function addVedio() {
-
+            window.location.href = "article-add-edit.jsp";
         }
 
 
