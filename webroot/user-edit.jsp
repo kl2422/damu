@@ -165,14 +165,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									<div class="control-group">
 										<label class="control-label">旧密码 </label>
 										<div class="controls">
-											<input type="text" class="input-xlarge" name="password" style="min-height: 30px" placeholder="用户名">
+											<input type="text" class="input-xlarge" name="password" style="min-height: 30px" placeholder="旧密码">
 											<p class="help-block"></p>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label">新密码 </label>
 										<div class="controls">
-											<input type="text" class="input-xlarge" name="newPassword" style="min-height: 30px" placeholder="邮箱">
+											<input type="text" class="input-xlarge" name="newPassword" style="min-height: 30px" placeholder="新密码">
 											<p class="help-block"></p>
 										</div>
 									</div>
