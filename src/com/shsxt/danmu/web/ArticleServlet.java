@@ -67,6 +67,30 @@ public class ArticleServlet extends HttpServlet {
 		addOrUpdate(response, request, article);
 	}
 
+	/**
+	 * 修改
+	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
+	 */
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Article article = RequestParamsUtil.formatParams(request, Article.class);
+		ResultInfo resultInfo = new ResultInfo();
+		try {
+			LoginUserIdentity loginUserIdentity = (LoginUserIdentity)request.getSession()
+					.getAttribute(Constant.LOGIN_USER_KEY);
+			articleService.delete(article.getId(), loginUserIdentity.getUserName());
+			resultInfo.setCode(200);
+			resultInfo.setMsg(Constant.SUCCESS_MSG);
+		} catch (ParamException ex) {
+			resultInfo.setCode(ex.getErrorCode());
+			resultInfo.setMsg(ex.getMessage());
+		} catch (Exception ex) {
+			resultInfo.setCode(Constant.FAILED_CODE);
+			resultInfo.setMsg(ex.getMessage());
+		}
+		JsonUtil.toJson(resultInfo, response);
+	}
+
 
 
 	/**
@@ -81,11 +105,20 @@ public class ArticleServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		Article article = articleService.finById(Integer.parseInt(articleId));
+		String actType = request.getParameter("actType"); // 查询类型 没有代表查询 有就代表修改
+		if (StringUtil.isNotEmpty(actType)) {
+			ResultInfo resultInfo = new ResultInfo();
+			resultInfo.setResult(article);
+			resultInfo.setMsg(Constant.SUCCESS_MSG);
+			resultInfo.setCode(Constant.SUCCESS_CODE);
+			JsonUtil.toJson(resultInfo, response);
+			return;
+		}
+
 		request.setAttribute("article", article);
 		// 获取用户信息
 		UserVo userVo = userService.findById(article.getUserId());
 		request.setAttribute("userVo", userVo);
-		String actType = request.getParameter("actType"); // 查询类型 没有代表查询 有就代表修改
 
 		// 判断此用户是否为登录用户
 		boolean isLogin = false;
@@ -95,11 +128,9 @@ public class ArticleServlet extends HttpServlet {
 			isLogin = true;
 		}
 		request.setAttribute("isLogin", isLogin);
-		if (StringUtil.isNotEmpty(actType)) {
-			request.getRequestDispatcher("article-edit.jsp").forward(request, response);
-		} else {
-			request.getRequestDispatcher("article-detail.jsp").forward(request, response);
-		}
+		// 更新点击量
+		articleService.updateHits(article.getId());
+		request.getRequestDispatcher("article-detail.jsp").forward(request, response);
 	}
 
 	/**
@@ -112,7 +143,6 @@ public class ArticleServlet extends HttpServlet {
 		// 分页获取文章
 		PageList<Article> result = articleService.selectForPage(articleDto);
 		Paginator paginator = result.getPaginator();
-		System.out.println(paginator.getPrePage());
 		ResultInfo resultInfo = new ResultInfo();
 		resultInfo.setResult(result);
 		resultInfo.setMsg(Constant.SUCCESS_MSG);

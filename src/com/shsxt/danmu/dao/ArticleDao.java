@@ -16,11 +16,16 @@ public class ArticleDao {
 	 */
 	public Long count(ArticleDto articleDto) {
 		String sql = "select count(1) as amount from t_article where is_valid = 1";
+		// 根据用户ID查询
+		if (articleDto.getUserId() != null) {
+			sql += " and user_id = " + articleDto.getUserId();
+		}
 		// 根据title或者content模糊匹配
 		if (StringUtil.isNotEmpty(articleDto.getSearchKey())) {
 			sql += " and (content like '%"+ articleDto.getSearchKey() 
 				+ "%' or title like '%"+ articleDto.getSearchKey() +"%')";
 		}
+
 		// 标签搜索 逗号分隔 可以查询多个eg:动画,好玩
 		sql = buildTagQuerySql(articleDto.getTags(), sql);
 		return (Long) DBUtil.queryColumn("amount", sql);
@@ -106,7 +111,7 @@ public class ArticleDao {
 	 * @param article
 	 */
 	public void insert(Article article) {
-		String sql = "insert into t_article (title, content, vedio, user_id, hits, tags, is_valid, create_date, update_date) " +
+		String sql = "insert into t_article (title, content, video, user_id, hits, tags, is_valid, create_date, update_date) " +
 				" values (?, ?, ?, ?, 0, ?, 1, now(), now())";
 		DBUtil.update(sql, article.getTitle(), article.getContent(),
 				article.getVideo(), article.getUserId(), article.getTags());
@@ -117,9 +122,19 @@ public class ArticleDao {
 	 * @param article
 	 */
 	public void update(Article article) {
-		String sql = "update t_article set title = ?, content = ?, vedio = ?, " +
+		String sql = "update t_article set title = ?, content = ?, video = ?, " +
 				"user_id = ?, tags = ?, update_date = now() where id = ?";
 		DBUtil.update(sql, article.getTitle(), article.getContent(),
 				article.getVideo(), article.getUserId(), article.getTags(), article.getId());
+	}
+
+	public void delete(Integer id, Integer userId) {
+		String sql = "update t_article set is_valid = 0 where id = ? and user_id = ?";
+		DBUtil.update(sql, id, userId);
+	}
+
+	public void updateHits(Integer id) {
+		String sql = "update t_article set hits = hits + 1 where id = ?";
+		DBUtil.update(sql, id);
 	}
 }

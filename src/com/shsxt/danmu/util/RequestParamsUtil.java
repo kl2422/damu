@@ -4,6 +4,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +49,7 @@ public class RequestParamsUtil {
         try {
             // 获取请求的参数字符串userName=abc&userPwd=1234
             String params = IOUtils.toString(request.getInputStream(), "utf-8");
+            params = URLDecoder.decode(params, "UTF-8");
             Map<String, String> mapParams = new HashMap<>();
             String[] arrSplit = params.split("&");
             for(String strSplit : arrSplit) {
@@ -57,7 +59,8 @@ public class RequestParamsUtil {
                     continue;
                 }
                 //正确解析
-                mapParams.put(arrSplitEqual[0], arrSplitEqual[1]);
+                String val = URLDecoder.decode(arrSplitEqual[1], "utf-8");
+                mapParams.put(arrSplitEqual[0], val);
             }
             return mapParams;
         } catch (Exception e) {
@@ -87,7 +90,8 @@ public class RequestParamsUtil {
                     continue;
                 }
                 //注意这里导入的是  import org.apache.commons.beanutils.BeanUtils;
-                BeanUtils.setProperty(bean, arrSplitEqual[0], arrSplitEqual[1]);
+                String val = URLDecoder.decode(arrSplitEqual[1], "utf-8");
+                BeanUtils.setProperty(bean, arrSplitEqual[0], val);
             }
             return bean;
         } catch (Exception e) {

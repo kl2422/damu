@@ -2,6 +2,7 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+String id = request.getParameter("id");
 %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -68,34 +69,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<body>
 
 		<!--Header-->
-		<header class="navbar navbar-fixed-top">
-			<div class="navbar-inner">
-				<div class="container">
-					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</a>
-					<a id="logo" class="pull-left" href="index.html"></a>
-					<div class="nav-collapse collapse pull-right">
-						<ul class="nav">
-							<li class="active"><a href="blog.html">首页</a></li>
-							<li class="login" id="loginInfo">
-								<c:choose>
-									<c:when test="${empty loginUser}">
-										<a data-toggle="modal" href="#loginForm"><i class="icon-lock"></i></a>
-									</c:when>
-									<c:otherwise>
-										<a href="profile">${loginUser.userName}</a>
-									</c:otherwise>
-								</c:choose>
-
-							</li>
-						</ul>
-					</div><!--/.nav-collapse -->
-				</div>
-			</div>
-		</header>
+		<jsp:include page="common/header.jsp" />
 		<!-- /header -->
 
 		<section id="about-us" class="container">
@@ -106,6 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div class="box span12">
 							<div class="box-header">
 								<span><i class="halflings-icon edit"></i><span class="break"></span>添加视频</span>
+								<button type="button" onclick="goBack();" class="btn">返回</button>
 								<div class="box-icon">
 									<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
 									<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -114,23 +89,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</div>
 							<div class="box-content">
 								<form class="form-horizontal" id="articleInfo">
+									<input type="hidden" value="<%=id%>" id="id" />
 									<fieldset>
 										<div class="control-group">
 											<label class="control-label">标题 </label>
 											<div class="controls">
-												<input type="text" class="input-xlarge" name="title" style="min-height: 30px" placeholder="标题">
+												<input type="text" class="input-xlarge" id="title" style="min-height: 30px; width: 564px;" placeholder="标题">
 												<p class="help-block">*</p>
 											</div>
 										</div>
 										<div class="control-group">
 											<label class="control-label">标签 </label>
 											<div class="controls">
-												<input type="text" class="input-xlarge" name="tags" style="min-height: 30px" placeholder="标签">
+												<input type="text" class="input-xlarge" id="tags" style="min-height: 30px; width: 564px;" placeholder="标签">
 												<p class="help-block">*</p>
 											</div>
 										</div>
 										<div class="control-group">
 											<label class="control-label">视频 </label>
+											<input type="hidden" id="videoUrl" />
 											<div class="controls">
 												<div id="uploader" class="wu-example">
 													<div class="btns">
@@ -146,13 +123,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										<div class="control-group">
 											<label class="control-label">描述 </label>
 											<div class="controls">
-												<textarea class="input-xlarge" id="content" name="content" rows="3" style="resize: none" ></textarea>
+												<textarea class="input-xlarge" id="content" rows="3" style="resize: none" ></textarea>
 												<p class="help-block">*</p>
 											</div>
 										</div>
 
 										<div class="form-actions">
-											<button type="button" onclick="saveInfo();" class="btn btn-primary">保存</button>
+											<button type="button" id="saveInfo" class="btn btn-primary">保存</button>
 											<button type="button" onclick="goBack();" class="btn">返回</button>
 										</div>
 									</fieldset>
@@ -166,149 +143,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</section>
 
-		<!--Bottom-->
-		<section id="bottom" class="main">
-			<!--Container-->
-			<div class="container">
-
-				<!--row-fluids-->
-				<div class="row-fluid">
-
-					<!--Contact Form-->
-					<div class="span3">
-						<h4>ADDRESS</h4>
-						<ul class="unstyled address">
-							<li>
-								<i class="icon-home"></i><strong>Address:</strong> 1032 Wayback Lane, Wantagh<br>NY 11793
-							</li>
-							<li>
-								<i class="icon-envelope"></i>
-								<strong>Email: </strong> support@email.com
-							</li>
-							<li>
-								<i class="icon-globe"></i>
-								<strong>Website:</strong> www.domain.com
-							</li>
-							<li>
-								<i class="icon-phone"></i>
-								<strong>Toll Free:</strong> 631-409-3105
-							</li>
-						</ul>
-					</div>
-					<!--End Contact Form-->
-
-					<!--Important Links-->
-					<div id="tweets" class="span3">
-						<h4>OUR COMPANY</h4>
-						<div>
-							<ul class="arrow">
-								<li><a href="#">About Us</a></li>
-								<li><a href="#">Support</a></li>
-								<li><a href="#">Terms of Use</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-								<li><a href="#">Copyright</a></li>
-								<li><a href="#">We are hiring</a></li>
-								<li><a href="#">Clients</a></li>
-								<li><a href="#">Blog</a></li>
-							</ul>
-						</div>
-					</div>
-					<!--Important Links-->
-
-					<!--Archives-->
-					<div id="archives" class="span3">
-						<h4>ARCHIVES</h4>
-						<div>
-							<ul class="arrow">
-								<li><a href="#">December 2012 (1)</a></li>
-								<li><a href="#">November 2012 (5)</a></li>
-								<li><a href="#">October 2012 (8)</a></li>
-								<li><a href="#">September 2012 (10)</a></li>
-								<li><a href="#">August 2012 (29)</a></li>
-								<li><a href="#">July 2012 (1)</a></li>
-								<li><a href="#">June 2012 (31)</a></li>
-							</ul>
-						</div>
-					</div>
-					<!--End Archives-->
-
-					<div class="span3">
-						<h4>FLICKR GALLERY</h4>
-						<div class="row-fluid first">
-							<ul class="thumbnails">
-								<li class="span3">
-									<a href="http://www.flickr.com/photos/76029035@N02/6829540293/" title="01 (254) by Victor1558, on Flickr"><img src="http://farm8.staticflickr.com/7003/6829540293_bd99363818_s.jpg" width="75" height="75" alt="01 (254)"></a>
-								</li>
-								<li class="span3">
-									<a href="http://www.flickr.com/photos/76029035@N02/6829537417/" title="01 (196) by Victor1558, on Flickr"><img src="http://farm8.staticflickr.com/7013/6829537417_465d28e1db_s.jpg" width="75" height="75" alt="01 (196)"></a>
-								</li>
-								<li class="span3">
-									<a href="http://www.flickr.com/photos/76029035@N02/6829527437/" title="01 (65) by Victor1558, on Flickr"><img src="http://farm8.staticflickr.com/7021/6829527437_88364c7ec4_s.jpg" width="75" height="75" alt="01 (65)"></a>
-								</li>
-								<li class="span3">
-									<a href="http://www.flickr.com/photos/76029035@N02/6829524451/" title="01 (6) by Victor1558, on Flickr"><img src="http://farm8.staticflickr.com/7148/6829524451_a725793358_s.jpg" width="75" height="75" alt="01 (6)"></a>
-								</li>
-							</ul>
-						</div>
-						<div class="row-fluid">
-							<ul class="thumbnails">
-								<li class="span3">
-									<a href="http://www.flickr.com/photos/76029035@N02/6829524451/" title="01 (6) by Victor1558, on Flickr"><img src="http://farm8.staticflickr.com/7148/6829524451_a725793358_s.jpg" width="75" height="75" alt="01 (6)"></a>
-								</li>
-								<li class="span3">
-									<a href="http://www.flickr.com/photos/76029035@N02/6829540293/" title="01 (254) by Victor1558, on Flickr"><img src="http://farm8.staticflickr.com/7003/6829540293_bd99363818_s.jpg" width="75" height="75" alt="01 (254)"></a>
-								</li>
-								<li class="span3">
-									<a href="http://www.flickr.com/photos/76029035@N02/6829537417/" title="01 (196) by Victor1558, on Flickr"><img src="http://farm8.staticflickr.com/7013/6829537417_465d28e1db_s.jpg" width="75" height="75" alt="01 (196)"></a>
-								</li>
-								<li class="span3">
-									<a href="http://www.flickr.com/photos/76029035@N02/6829527437/" title="01 (65) by Victor1558, on Flickr"><img src="http://farm8.staticflickr.com/7021/6829527437_88364c7ec4_s.jpg" width="75" height="75" alt="01 (65)"></a>
-								</li>
-							</ul>
-						</div>
-
-					</div>
-
-				</div>
-				<!--/row-fluid-->
-			</div>
-			<!--/container-->
-
-		</section>
-		<!--/bottom-->
 
 		<!--Footer-->
-		<footer id="footer">
-			<div class="container">
-				<div class="row-fluid">
-					<div class="span5 cp">
-						&copy; 2013 More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>. All Rights Reserved.
-					</div>
-					<!--/Copyright-->
-
-					<div class="span6">
-						<ul class="social pull-right">
-							<li><a href="#"><i class="icon-facebook"></i></a></li>
-							<li><a href="#"><i class="icon-twitter"></i></a></li>
-							<li><a href="#"><i class="icon-pinterest"></i></a></li>
-							<li><a href="#"><i class="icon-linkedin"></i></a></li>
-							<li><a href="#"><i class="icon-google-plus"></i></a></li>
-							<li><a href="#"><i class="icon-youtube"></i></a></li>
-							<li><a href="#"><i class="icon-tumblr"></i></a></li>
-							<li><a href="#"><i class="icon-dribbble"></i></a></li>
-							<li><a href="#"><i class="icon-rss"></i></a></li>
-							<li><a href="#"><i class="icon-github-alt"></i></a></li>
-							<li><a href="#"><i class="icon-instagram"></i></a></li>
-						</ul>
-					</div>
-
-					<div class="span1">
-						<a id="gototop" class="gototop pull-right" href="#"><i class="icon-angle-up"></i></a>
-					</div>
-					<!--/Goto Top-->
-				</div>
-			</div>
-		</footer>
+		<jsp:include page="common/footer.jsp" />
 		<!--/Footer-->
 
 		<!--  Login form -->
@@ -341,6 +178,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="<%=path%>/statics/webuploader/webuploader.js"></script>
 		<script>
 			$(function() {
+
+			    // 判断是否是编辑
+				var id = $("#id").val();
+				var content = '';
+				if (id != null && id > 0) {
+                    $.ajax({
+                        url:'article',
+                        type:'get',
+                        data: {"id": id, actType: 1},
+                        dataType: 'json',
+                        async: false, // 是否异步
+                        success: function (resp) {
+                            if (resp.code == 200) {
+								$("#title").val(resp.result.title);
+								$("#tags").val(resp.result.tags);
+								$("#videoUrl").val(resp.result.video);
+								content= resp.result.content
+                            }
+                        },
+                        error: function (xhr,status,error) {
+                            console.error(status + "---" +  error);
+                        }
+                    });
+				}
+
 			    // 文件上传
                 var uploader = WebUploader.create({
                     // 选完文件后，是否自动上传。
@@ -393,8 +255,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 });
 
                 // 文件上传成功，给item添加成功class, 用样式标记上传成功。
-                uploader.on( 'uploadSuccess', function( file ) {
+                uploader.on( 'uploadSuccess', function( file, response ) {
                     $( '#'+file.id ).addClass('upload-state-done');
+                    $("#videoUrl").val(response.result);
                 });
 
                 // 文件上传失败，显示上传出错。
@@ -417,12 +280,64 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    // 编辑器
 				var editor = UE.ui.Editor({
 					initialFrameHeight : 350,
-					initialFrameWidth : 618,
-					initialContent: '',
+					initialFrameWidth : 600,
+					initialContent: content,
 					autoHeightEnabled: false
 				});
 				editor.render("content");//渲染
-			})
+
+                // 保存
+                $("#saveInfo").click(function() {
+                    var title = $("#title").val();
+                    if (title == null || title.trim().length == 0) {
+                        alert("请输入标题");
+                        return;
+					}
+					var tags = $("#tags").val();
+                    if (tags == null || tags.trim().length == 0) {
+                        alert("请输入标签");
+                        return;
+                    }
+
+					var videoUrl= $("#videoUrl").val();
+                    if (videoUrl == null || videoUrl.trim().length == 0) {
+                        alert("请上传视频");
+                        return;
+                    }
+                    var desc = editor.getContent();
+                    if (desc == null || desc.trim().length == 0) {
+                        alert("请输入描述");
+                        return;
+                    }
+                    var id = $("#id").val();
+					$.ajax({
+						url:'article',
+						type:'put',
+						// 这样是通过body进行提交数据，后台要手动从流中提取参数，
+						// 如果想要通过request.getParameter()获取就只能采取user?userName=**&userPwd=**提交
+						data: {id:id, title: title, tags: tags, content: desc, video: videoUrl},
+						dataType: 'json',
+						success: function (resp) {
+							if (resp.code != 200) { // 失败
+								alert(resp.msg);
+								return;
+							}
+							window.location.href = "profile"; // 跳转个人中心
+						},
+						error: function (xhr,status,error) {
+							console.error(xhr + status + error);
+						}
+                	});
+            	});
+
+			});
+
+            // 返回
+            function goBack() {
+                window.location.href = "profile";
+            }
+
+
 		</script>
 
 	</body>

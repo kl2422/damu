@@ -30,7 +30,7 @@ public class ArticleService {
 		if (total == null || total == 0) { // 如果没值直接返回
 			return new PageList<>();
 		}
-		articleDto.setSort("id.desc");
+		articleDto.setSort("update_date.desc");
 		List<Article> datas = articleDao.selectForPage(articleDto);
 
 		// 格式化数据
@@ -111,12 +111,44 @@ public class ArticleService {
 		}
 		if (article.getId() == null) { // 添加
 			article.setUserId(user.getId());
+			String tags = article.getTags();
+			if (tags.indexOf(",") != 0) {
+				tags = "," + tags + ",";
+			}
 			articleDao.insert(article);
 			return;
 		}
 		// 修改
 		// 先根据ID查询记录是否存在 在赋值，在更新
 		update(article);
+	}
+
+	/**
+	 * 删除视频
+	 * @param id
+	 * @param loginUserName
+	 */
+	public void delete(Integer id, String loginUserName) {
+		if (id == null || id < 1) {
+			throw new ParamException("请选择要删除的视频");
+		}
+		// 通过登录用户名获取用户id
+		User user = userService.findByUserName(loginUserName.trim());
+		if (user == null) {
+			throw new ParamException(201, "请登录");
+		}
+		articleDao.delete(id, user.getId());
+	}
+
+	/**
+	 * 增加点击量
+	 * @param id
+	 */
+	public void updateHits(Integer id) {
+		if (id == null || id < 1) {
+			throw new ParamException("请选择要删除的视频");
+		}
+		articleDao.updateHits(id);
 	}
 
 	/**
@@ -139,7 +171,9 @@ public class ArticleService {
 	private void formatSigleArticle(Article article) {
 		String tags = article.getTags(); // ,abc,bcd,
 		if (StringUtil.isNotEmpty(tags)) {
-			String[] tagArr = tags.substring(tags.indexOf(",") + 1, tags.lastIndexOf(",")).split(",");
+			tags = tags.substring(tags.indexOf(",") + 1, tags.lastIndexOf(","));
+			article.setTags(tags);
+			String[] tagArr = tags.split(",");
 			List<String> tagList = Arrays.asList(tagArr);
 			article.setTagList(tagList);
 		}
@@ -245,7 +279,14 @@ public class ArticleService {
 			throw new ParamException("该记录不存在，请重试");
 		}
 		try {
-			BeanUtils.copyProperties(articleFromDb, article);
+			articleFromDb.setTitle(article.getTitle());
+			String tags = article.getTags();
+			if (tags.indexOf(",") != 0) {
+				tags = "," + tags + ",";
+			}
+			articleFromDb.setTags(tags);
+			articleFromDb.setVideo(article.getVideo());
+			articleFromDb.setContent(article.getContent());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

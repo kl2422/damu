@@ -26,7 +26,6 @@ public class JsonUtil {
 		} catch (IOException e) {
 			logger.error("传送错误：{}", e);
 		} finally {
-
 			if(pw != null) {
 				pw.close();
 			}

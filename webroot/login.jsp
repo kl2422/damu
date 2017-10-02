@@ -131,34 +131,7 @@
 	<body>
 
 		<!--Header-->
-		<header class="navbar navbar-fixed-top">
-			<div class="navbar-inner">
-				<div class="container">
-					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</a>
-					<a id="logo" class="pull-left" href="index.html"></a>
-					<div class="nav-collapse collapse pull-right">
-						<ul class="nav">
-							<li class="active"><a href="blog.html">首页</a></li>
-							<li class="login" id="loginInfo">
-								<c:choose>
-									<c:when test="${empty loginUser}">
-										<a data-toggle="modal" href="#loginForm"><i class="icon-lock"></i></a>
-									</c:when>
-									<c:otherwise>
-										<a href="profile">${loginUser.userName}</a>
-									</c:otherwise>
-								</c:choose>
-
-							</li>
-						</ul>
-					</div><!--/.nav-collapse -->
-				</div>
-			</div>
-		</header>
+		<jsp:include page="common/header.jsp" />
 		<!-- /header -->
 
 		<div class="msg">登录/注册</div>
