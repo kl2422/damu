@@ -27,6 +27,7 @@ String id = request.getParameter("id");
 		<!--引入CSS-->
 		<link rel="stylesheet" type="text/css" href="<%=path%>/statics/webuploader/webuploader.css">
 		<link rel="stylesheet" href="<%=path%>/statics/webuploader/style.css">
+		<link rel="stylesheet" href="<%=path%>/statics/css/tagator.jquery.css">
 		<script src="<%=path%>/statics/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 
 		<!-- Le fav and touch icons -->
@@ -101,7 +102,7 @@ String id = request.getParameter("id");
 										<div class="control-group">
 											<label class="control-label">标签 </label>
 											<div class="controls">
-												<input type="text" class="input-xlarge" id="tags" style="min-height: 30px; width: 564px;" placeholder="标签">
+												<input type="text" class="input-xlarge" id="tags" style="width: 600px; height: 36px;" placeholder="标签">
 												<p class="help-block">*</p>
 											</div>
 										</div>
@@ -172,6 +173,7 @@ String id = request.getParameter("id");
 
 		<script src="<%=path%>/statics/js/vendor/jquery-1.9.1.min.js"></script>
 		<script src="<%=path%>/statics/js/vendor/bootstrap.min.js"></script>
+		<script src="<%=path%>/statics/js/tagator.jquery.js"></script>
 		<script src="<%=path%>/statics/ueditor/ueditor.config.js"></script>
 		<script src="<%=path%>/statics/ueditor/ueditor.all.js"></script>
 		<!--引入JS-->
@@ -203,7 +205,13 @@ String id = request.getParameter("id");
                     });
 				}
 
-			    // 文件上传
+				// tag标签
+                $('#tags').tagator({
+					// 输入以下单词自动补全, 支持中文
+                    autocomplete: ['JAVA', '大数据', '前端', '全栈', '标签']
+                });
+
+                // 文件上传
                 var uploader = WebUploader.create({
                     // 选完文件后，是否自动上传。
                     auto: true,
