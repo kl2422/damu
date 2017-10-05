@@ -203,7 +203,7 @@
                     data: {"userName": userName, "userPwd": userPwd},
                     dataType: 'json',
                     success: function (resp) {
-                        if (resp.code != 200) { // 注册失败
+                        if (resp.code != 200) { // 登录失败
                             $("#errorInfo").html(resp.msg);
                             return;
                         }

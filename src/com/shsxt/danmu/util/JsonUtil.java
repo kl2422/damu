@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +20,7 @@ public class JsonUtil {
 			response.setContentType("application/json;chartset=utf-8");
 			pw = response.getWriter();
 			String result = new Gson().toJson(obj);
+			System.out.println(result);
 			pw.write(result);
 			pw.flush();
 		} catch (IOException e) {

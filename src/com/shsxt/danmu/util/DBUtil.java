@@ -223,6 +223,7 @@ public class DBUtil {
 
 	// 更新（包括 UPDATE、INSERT、DELETE，返回受影响的行数）
 	public static int update(String sql, Object... params) {
+		System.out.println(params.length);
 		int result = 0;
 		try {
 			QueryRunner runner = new QueryRunner(dataSource);

@@ -82,11 +82,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 						<div class="box-content">
 							<form class="form-horizontal" id="basicInfo">
+							<input type="hidden" name="id" value="${userVo.id }"/>
 								<fieldset>
 									<div class="control-group">
 										<label class="control-label">用户名 </label>
 										<div class="controls">
-											<input type="text" class="input-xlarge" name="userName" value="${userVo.userName}" style="min-height: 30px" placeholder="用户名">
+											<input type="text" class="input-xlarge" id="userName" name="userName" value="${userVo.userName}" style="min-height: 30px" placeholder="用户名">
 											<p class="help-block">*</p>
 										</div>
 									</div>
@@ -134,18 +135,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 						<div class="box-content">
 							<form class="form-horizontal" id="passwordInfo">
+							<input type="hidden" name="id" value="${userVo.id }"/>
 								<fieldset>
 									<div class="control-group">
 										<label class="control-label">旧密码 </label>
 										<div class="controls">
-											<input type="text" class="input-xlarge" name="password" style="min-height: 30px" placeholder="旧密码">
+											<input type="text" class="input-xlarge" name="oldPwd" style="min-height: 30px" placeholder="旧密码">
 											<p class="help-block"></p>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label">新密码 </label>
 										<div class="controls">
-											<input type="text" class="input-xlarge" name="newPassword" style="min-height: 30px" placeholder="新密码">
+											<input type="text" class="input-xlarge" id="userPwd" name="userPwd" style="min-height: 30px" placeholder="新密码">
 											<p class="help-block"></p>
 										</div>
 									</div>
@@ -172,6 +174,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 						<div class="box-content">
 							<form class="form-horizontal" id="wisdomInfo">
+							<input type="hidden" name="id" value="${userVo.id }"/>
 								<fieldset>
 									<div class="control-group">
 										<label class="control-label">名言 </label>
@@ -231,14 +234,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="<%=path%>/statics/js/vendor/jquery-1.9.1.min.js"></script>
 	<script src="<%=path%>/statics/js/vendor/bootstrap.min.js"></script>
 	<script src="<%=path%>/statics/js/main.js"></script>
-
+	<script src="<%=path%>/statics/js/util.js"></script>
 	<script>
 		// 保存基本信息
-		function saveBascInfo() {
+		function saveBasicInfo() {
+			var userName = $("#userName").val();
+			
+			if(isEmpty(userName)){
+				alert("用户名不能为空");
+				return;
+			}
 			var data = $("#basicInfo").serialize();
-			$.post("user", data, function(resp) {
-
-			});
+			doUpdate(data);
+			
 		}
 
 		// 返回
@@ -248,13 +256,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 		// 密码修改
 		function savePassword() {
+			var newPwd = $("#userPwd").val();
+			
+			if(isEmpty(newPwd)){
+				alert("密码不能为空");
+				return;
+			}
+			var data = $("#passwordInfo").serialize();
+			doUpdate(data);
 
 		}
 
 		// 名言名句修改
         function saveWisdom() {
-
+        	var data = $("#wisdomInfo").serialize();
+			doUpdate(data);
         }
+		
+		
+		function doUpdate(info){
+			$.post("user", info, function(resp) {
+				callback(resp);
+			});
+		}
 
         // 回调
         function callback(resp) {
