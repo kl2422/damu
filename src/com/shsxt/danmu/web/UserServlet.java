@@ -16,7 +16,6 @@ import com.shsxt.danmu.service.UserService;
 import com.shsxt.danmu.util.JsonUtil;
 import com.shsxt.danmu.util.RequestParamsUtil;
 import com.shsxt.danmu.util.StringUtil;
-import com.shsxt.danmu.util.ToBean;
 import com.shsxt.danmu.vo.LoginUserIdentity;
 import com.shsxt.danmu.vo.ResultInfo;
 import com.shsxt.danmu.vo.UserVo;
@@ -127,19 +126,9 @@ public class UserServlet extends HttpServlet {
 		 * userService.updateBlogName(user); }
 		 */
 		String oldPwd = request.getParameter("oldPwd");
-		UserVo user = null;
-		try {
-			user = ToBean.toBean(request,UserVo.class);
-			Wisdom wisdom = ToBean.toBean(request,Wisdom.class);
-			user.setWisdom(wisdom);
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		UserVo user = RequestParamsUtil.requestToBean(request,UserVo.class);
+		Wisdom wisdom = RequestParamsUtil.requestToBean(request,Wisdom.class);
+		user.setWisdom(wisdom);
 		
 		boolean flag = userService.updateBasicInfo(user, oldPwd);
 		if(flag){
